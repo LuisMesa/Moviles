@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Guia3</string>
+    <string name="title_activity_pedidos">PedidosActivity</string>
+    <string name="client_name">Nombre del cliente</string>
+    <string name="oder_place">Lugar del envio</string>
+</resources>
