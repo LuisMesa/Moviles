@@ -3,4 +3,6 @@
     <string name="title_activity_pedidos">PedidosActivity</string>
     <string name="client_name">Nombre del cliente</string>
     <string name="oder_place">Lugar del envio</string>
+    <string name="open_modal">Open modal</string>
 </resources>
+

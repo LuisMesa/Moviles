@@ -15,11 +15,21 @@
     tools:context="com.example.android.guia3.PedidosActivity"
     tools:showIn="@layout/activity_pedidos">
     <EditText
+        android:id="@+id/nombre_cliente"
         android:hint="@string/client_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <EditText
+        android:id="@+id/lugar_pedido"
         android:hint="@string/oder_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:text="@string/oder_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pedir_btn"
+        android:backgroundTint="@color/colorAccent"
+        />
 </LinearLayout>
