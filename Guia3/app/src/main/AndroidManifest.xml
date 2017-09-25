@@ -20,12 +20,14 @@
         <activity
             android:name=".PedidosActivity"
             android:label="@string/title_activity_pedidos"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.guia3.MainActivity" />
         </activity>
+        <activity android:name=".MetodoActivity"></activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.android.guia3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +30,9 @@ public class PedidosActivity extends AppCompatActivity {
     private int platoId;
     CoordinatorLayout coordinatorLayout;
 
+    public final static int PAYMENT = 1111;
+    private static final String TAG = "Pedidos";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -54,7 +58,31 @@ public class PedidosActivity extends AppCompatActivity {
                 realizarPedido();
             }
         });
+        Button btnMetodo = (Button) findViewById(R.id.payment_method);
+        btnMetodo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                solicitarMetodo();
+            }
+        });
     }
+    private void solicitarMetodo() {
+        Intent i = new Intent(this, MetodoActivity.class);
+        startActivityForResult(i,PAYMENT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent
+            data) {
+        Log.d(TAG,"Llega resultado de otra actividad");
+        if (requestCode==PAYMENT){
+            if(resultCode==111){
+                Button btnPayment = (Button) findViewById(R.id.payment_method);
+                btnPayment.setText(data.getStringExtra("method"));
+            }
+        }
+    }
+
     public void realizarPedido() {
         String cliente = ((TextView) findViewById(R.id.nombre_cliente)).getText().toString();
         String lugar = ((TextView) findViewById(R.id.lugar_pedido)).getText().toString();

@@ -26,10 +26,23 @@
         android:layout_height="wrap_content" />
 
     <Button
-        android:text="@string/oder_place"
+        android:text="@string/sel_metodo_pago"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/payment_method"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/colorAccent"
+        />
+    <Button
+        android:text="@string/make_request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/pedir_btn"
         android:backgroundTint="@color/colorAccent"
         />
+    <fragment
+        android:name="com.example.android.guia3.fragments.PropinaFragment"
+        android:id="@+id/fragment_propina"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
