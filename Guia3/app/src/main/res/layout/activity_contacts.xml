@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.android.guia3.PedidosActivity"
-    android:id="@+id/coordinator_layout"
-    >
+    tools:context="com.example.android.guia3.ContactsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,7 +21,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_pedidos" />
+    <include layout="@layout/content_contacts" />
 
 
 

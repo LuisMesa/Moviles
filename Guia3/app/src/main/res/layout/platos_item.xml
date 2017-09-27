@@ -25,7 +25,6 @@
         android:typeface="sans"
         android:textSize="15sp"
         android:textStyle="bold"/>
-
     <TextView
         android:id="@+id/precio_plato"
         android:layout_width="wrap_content"
@@ -37,5 +36,12 @@
         android:textSize="10dip"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"/>
+ <ImageView
+     android:layout_toLeftOf="@+id/precio_plato"
+     android:src="@drawable/if_share4_216719"
+     android:id="@+id/share_item"
+     android:padding="10dip"
+     android:layout_width="50dip"
+     android:layout_height="50dip"/>
 
 </RelativeLayout>

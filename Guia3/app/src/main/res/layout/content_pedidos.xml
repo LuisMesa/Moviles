@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,35 +17,66 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.guia3.PedidosActivity"
     tools:showIn="@layout/activity_pedidos">
-    <EditText
-        android:id="@+id/nombre_cliente"
-        android:hint="@string/client_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/lugar_pedido"
-        android:hint="@string/oder_place"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:text="@string/sel_metodo_pago"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/payment_method"
-        android:textAllCaps="false"
-        android:backgroundTint="@color/colorAccent"
-        />
-    <Button
-        android:text="@string/make_request"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pedir_btn"
-        android:backgroundTint="@color/colorAccent"
-        />
-    <fragment
-        android:name="com.example.android.guia3.fragments.PropinaFragment"
-        android:id="@+id/fragment_propina"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/nombre_cliente"
+            android:hint="@string/client_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/lugar_pedido"
+            android:hint="@string/oder_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:text="@string/sel_metodo_pago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/payment_method"
+            android:textAllCaps="false"
+            android:backgroundTint="@color/colorAccent"
+            />
+
+            />
+        <fragment
+            android:name="com.example.android.guia3.fragments.PropinaFragment"
+            android:id="@+id/fragment_propina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:textAllCaps="false"
+            android:text="@string/find_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/gps_btn"
+            android:backgroundTint="@color/colorAccent"/>
+        <Button
+            android:textAllCaps="false"
+            android:text="@string/select_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/image_btn"
+            android:backgroundTint="@color/colorAccent"/>
+        <ImageView
+            android:id="@+id/client_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:gravity="center"
+            android:text="@string/movement_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Button
+            android:text="@string/make_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pedir_btn"
+            android:backgroundTint="@color/colorAccent"/>
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text=""
+            android:textSize="40dp"/>
 </LinearLayout>
+</ScrollView>
