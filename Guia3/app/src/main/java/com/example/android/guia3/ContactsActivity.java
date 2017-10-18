@@ -25,7 +25,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import static android.R.attr.id;
 import static android.R.attr.name;
-import static com.example.android.guia3.R.id.parent;
+//import static com.example.android.guia3.R.id.parent;
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 

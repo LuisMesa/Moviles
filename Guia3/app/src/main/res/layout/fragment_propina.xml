@@ -3,34 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.guia3.fragments.PropinaFragment">
-
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <Button
-            android:id="@+id/menos"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-1000"
-            />
+        android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/propina_text"
-            android:text="1000"
+            android:id="@+id/domiciliario"
             android:gravity="center"
-            android:layout_weight="1.0"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            />
-        <Button
-            android:id="@+id/mas"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+1000"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/menos"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-1000" />
+            <TextView
+                android:id="@+id/propina_text"
+                android:text="$1000"
+                android:gravity="center"
+                android:layout_weight="1.0"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/mas"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+1000" />
+        </LinearLayout>
     </LinearLayout>
-
 </FrameLayout>
