@@ -4,4 +4,7 @@
     <item android:id="@+id/action_alert"
         android:title="@string/open_modal"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_chef"
+        android:title="@string/conocer_al_chef"
+        app:showAsAction="never"/>
 </menu>
