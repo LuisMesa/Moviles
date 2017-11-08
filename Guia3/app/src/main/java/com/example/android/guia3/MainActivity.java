@@ -8,10 +8,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,8 +34,11 @@ import android.widget.Toast;
 
 import com.example.android.guia3.adapters.PlatoAdapter;
 import com.example.android.guia3.entities.Plato;
+import com.example.android.guia3.persistence.PlatosDatabase;
 import com.example.android.guia3.rest.RestClient;
 import com.example.android.guia3.services.GPSIntentService;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -47,12 +55,15 @@ import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
     public static final String GPS_FILTER = "GPSFilter";
+    public static final String SYNC_WIFI = "sync_wifi";
     private ListView listView;
     private List<Plato> platos = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog loadingDialog;
     private GPSReceiver receiver;
     private TextView gpsText;
+    private PlatosDatabase databaseHelper;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
         listView=(ListView)findViewById(R.id.platos_listView);
         gpsText=(TextView)findViewById(R.id.gps_textview);
+        databaseHelper = new PlatosDatabase(this);
         platos = new ArrayList();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,11 +86,22 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getPlatos2();
+                //getPlatos2();
+                getPlatos();
             }
         });
         mSwipeRefreshLayout.setRefreshing(true);
-        getPlatos2();
+        //getPlatos2();
+        getPlatos();
+        //Create new plato with FloatingActionButton
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPlatoDialogo();
+            }
+        });
+        //GPS
         receiver = new GPSReceiver(gpsText);
         this.registerReceiver(receiver, new IntentFilter(GPS_FILTER));
         Intent intent = new Intent(this, GPSIntentService.class);
@@ -122,54 +145,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void getPlatos() {
-        AsyncTask getPlatosWithDialog = new AsyncTask<Void,Void,Void>() {
-            @Override
-            protected void onPreExecute() {
-                loadingDialog = new ProgressDialog(MainActivity.this);
-                loadingDialog.setMessage("Cargando Platos");
-                loadingDialog.setTitle("Espera...");
-                loadingDialog.show();
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                RestClient.get("platos", null, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, JSONArray array) {
-                        try {
-                            for (int i = 0; i < array.length(); i++) {
-                                Gson gson = new GsonBuilder().create();
-                                Plato plato = gson.fromJson(array.get(i).toString(), Plato.class);
-                                platos.add(plato);
-                            }
-                            PlatoAdapter itemsAdapter = new PlatoAdapter(MainActivity.this, platos);
-                            listView.setAdapter(itemsAdapter);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, String res, Throwable error) {
-                        Toast.makeText(MainActivity.this, error.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-                return null;
-            }
-
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                PlatoAdapter itemsAdapter = new PlatoAdapter(MainActivity.this, platos);
-                if(listView!=null) {
-                    listView.setAdapter(itemsAdapter);
-                }if(loadingDialog!=null){
-                    loadingDialog.dismiss();
-                }
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }.execute();
+        platos = databaseHelper.getAllPlatos();
+        PlatoAdapter itemsAdapter = new PlatoAdapter(MainActivity.this,platos);
+        listView.setAdapter(itemsAdapter);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -195,8 +174,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_alert:
-                AlertDialog dialog = createAlertDialog();
+                final AlertDialog dialog = createAlertDialog();
                 dialog.show();
+                return true;
+            case R.id.action_sincronizar:
+                sincronizarTabla();
+                return true;
+            case R.id.action_settings:
+                Intent i = new Intent(MainActivity.this,SettingsActivity.class);
+                startActivity(i);
                 return true;
             case R.id.action_chef:
                 final Dialog chef_dialog = new Dialog(this);
@@ -217,6 +203,42 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void sincronizarTabla(){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean syncCnnPref = sharedPref.getBoolean(SYNC_WIFI,true);
+        if(syncCnnPref){
+            if(connectedToWifi()){
+                sincronizarPlatos();
+            }else{
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.error)
+                        .setMessage(R.string.wifi)
+                        .setPositiveButton(R.string.ok, null)
+                        .create().show();
+            }
+        }else{
+            sincronizarPlatos();
+        }
+    }
+    private boolean connectedToWifi(){
+        ConnectivityManager connManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi.isConnected();
+    }
+
+    private void sincronizarPlatos(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        for (int i =0; i<platos.size(); i++){
+            DatabaseReference myRef= database.getReference("platos/"+platos.get(i).getId());
+            myRef.setValue(platos.get(i));
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.result)
+                .setMessage(R.string.success_sync)
+                .setPositiveButton(R.string.ok, null)
+                .create().show();
+    }
     private class GPSReceiver extends BroadcastReceiver {
         private TextView textView;
         private Exception exception;
@@ -261,6 +283,32 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return inSampleSize;
+    }
+
+    private void addPlatoDialogo() {
+        final View view = getLayoutInflater().inflate(R.layout.dialog_plato,null);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.title_plato)
+                .setView(view)
+                .setPositiveButton(R.string.agregar_plato,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String nombre = ((TextView)view.findViewById(R.id.plato_nombre)).getText().toString();
+                                int precio = Integer.parseInt(((TextView)view.findViewById(R.id.plato_precio)).getText().toString());
+                                Plato nuevo = new Plato(0,nombre,precio,"");
+                                databaseHelper.addPlato(nuevo);
+                                getPlatos();
+                            }
+                        }
+                )
+                .setNegativeButton(android.R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                //Do something
+                            }
+                        }
+                )
+                .create().show();
     }
 }
 

@@ -7,4 +7,10 @@
     <item android:id="@+id/action_chef"
         android:title="@string/conocer_al_chef"
         app:showAsAction="never"/>
+    <item android:id="@+id/action_sincronizar"
+        android:title="@string/sincronizar"
+        app:showAsAction="never"/>
+    <item android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 </menu>

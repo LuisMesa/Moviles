@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.example.android.guia3"
@@ -10,6 +10,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -30,6 +31,8 @@ dependencies {
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     //compile "com.android.support:support-core-utils:25.4.0"
     //testCompile 'junit:junit:4.12'
+    implementation 'com.google.firebase:firebase-database:11.0.4'
+    implementation 'com.android.support:support-vector-drawable:25.4.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -45,3 +48,8 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.1'
     testCompile 'junit:junit:4.12'
 }
+
+
+
+
+apply plugin: 'com.google.gms.google-services'

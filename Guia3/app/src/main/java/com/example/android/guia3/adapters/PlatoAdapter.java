@@ -69,7 +69,7 @@ public class PlatoAdapter extends BaseAdapter {
         });
         nombreTextView.setText(plato.getNombre());
         precioTextView.setText("$" + plato.getPrecio());
-        Picasso.with(context).load(plato.getImagen()).resize(50, 50).centerCrop().into(imageView);
+        //Picasso.with(context).load(plato.getImagen()).resize(50, 50).centerCrop().into(imageView);
 
         return view;
     }
